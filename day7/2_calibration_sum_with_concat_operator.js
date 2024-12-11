@@ -15,13 +15,13 @@ const getSumAndMembers = (row) => {
 };
 
 const getIsEquationPossible = (members, operators, result) => {
-  const equationString = members.reduce((equationString, member, index) => {
-    const operator = index === members.length - 1 ? "" : operators[index];
-    return operator === "|"
-      ? `${equationString}${member}`
-      : `(${equationString}${member})${operator}`;
-  }, "");
-  return eval(equationString) === result;
+  const equationResult = members.reduce((prevResult, member, index) => {
+    const operator = operators[index - 1];
+    if (index === 0) return parseInt(member, 10);
+    if (prevResult > result) return prevResult;
+    return eval(`${prevResult}${operator === "|" ? "" : operator}${member}`);
+  }, 0);
+  return equationResult === result;
 };
 
 const operators = ["+", "*", "|"];
